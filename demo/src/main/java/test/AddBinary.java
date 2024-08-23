@@ -1,3 +1,5 @@
+package test;
+
 public class AddBinary {
     public String addBinary(String a, String b) {
         char[] char1 = a.toCharArray();
