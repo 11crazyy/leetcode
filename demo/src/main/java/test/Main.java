@@ -3,7 +3,8 @@ package test;
 public class Main {
 
     public static void main(String[] args) {
-        IsInterLeave isInterLeave = new IsInterLeave();
-        System.out.println(isInterLeave.isInterleave("aabcc", "dbbca", "aadbbcbcac"));
+        minimumDifference minimumDifference = new minimumDifference();
+       int t = minimumDifference.minimumDifference(new int[]{64407,3036},2);
+        System.out.println(t);
     }
 }
