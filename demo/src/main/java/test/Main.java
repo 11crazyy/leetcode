@@ -5,10 +5,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        TwoSum twoSum = new TwoSum();
-        int[] res = twoSum.twoSum(new int[]{2, 7, 11, 15}, 9);
-        for (int i = 0; i < res.length; i++) {
-            System.out.println(res[i]);
-        }
+        FindLeastNum findLeastNum = new FindLeastNum();
+        findLeastNum.findLeastNumOfUniqueInts(new int[]{2,4,1,8,3,5,1,3},3);
     }
 }
