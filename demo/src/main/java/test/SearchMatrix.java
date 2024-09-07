@@ -2,16 +2,18 @@ package test;
 
 public class SearchMatrix {
     public boolean searchMatrix(int[][] matrix, int target) {
-        int row = matrix.length - 1;
-        for (int i = 1; i < matrix.length; i++) {
-            if (target >= matrix[i - 1][0] && target < matrix[i][0]) {
-                row = i - 1;
-                break;
+        //找右上角元素
+        int j = matrix[0].length - 1;
+        int i = 0;
+        while (i < matrix.length && j >= 0) {
+            if (matrix[i][j] == target) {
+                return true;
             }
-        }
-        int column = matrix[0].length;
-        for (int i = 0; i < column; i++) {
-            if (matrix[row][i] == target) return true;
+            if (matrix[i][j] < target) {
+                i++;
+            } else if (matrix[i][j] > target) {
+                j--;
+            }
         }
         return false;
     }
