@@ -5,7 +5,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        SearchMatrix searchMatrix = new SearchMatrix();
-        searchMatrix.searchMatrix(new int[][]{{-5}},-5);
+        DP dp = new DP();
+        int costt = dp.minCostClimbingStairs(new int[]{10,15,20});
+        System.out.println(costt);
     }
 }
