@@ -1,5 +1,6 @@
 package test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,5 +22,19 @@ public class TotalFruit {
             sum = Math.max(sum, j - i + 1);//计算窗口的最大长度
         }
         return sum;
+    }
+                                                      
+    public int maximumBeauty(int[] nums, int k) {
+        //nums[right] - nums[left] > 2k
+        int left = 0;
+        int res = 0;
+        Arrays.sort(nums);
+        for (int right = 0; right < nums.length; right++) {
+            while (nums[right] - nums[left] > 2 * k) {
+                left++;
+            }
+            res = Math.max(res, right - left + 1);
+        }
+        return res;
     }
 }
