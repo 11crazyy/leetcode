@@ -23,7 +23,7 @@ public class TotalFruit {
         }
         return sum;
     }
-                                                      
+
     public int maximumBeauty(int[] nums, int k) {
         //nums[right] - nums[left] > 2k
         int left = 0;
@@ -34,6 +34,77 @@ public class TotalFruit {
                 left++;
             }
             res = Math.max(res, right - left + 1);
+        }
+        return res;
+    }
+
+    public int numberOfSubstrings(String s) {
+        int res = 0;
+        //双指针 找l-r区间内包含abc的最小子串 res + = len - r
+        //l右移，找下一个包含abc的最小子串
+        int left = 0, right = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+            while (map.size() == 3) {
+                res += s.length() - right;
+                char cl = s.charAt(left);
+                map.put(cl, map.get(cl) - 1);//更新map,移除left对应的元素
+                if (map.get(cl) == 0) {
+                    map.remove(cl);
+                }
+                left++;//左指针右移
+            }
+        }
+        return res;
+    }
+
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        //双指针 找l-r区间内最大的乘积小于k的子数组 res+=r-l+1
+        int res = 0;
+        if (k <= 1) {
+            return 0;
+        }
+        int left = 0, right = 0, sum = 1;
+        for (right = 0; right < nums.length; right++) {
+            sum *= nums[right];
+            while (sum >= k) {
+                sum /= nums[left++];
+            }
+            res += right - left + 1;
+        }
+        return res;
+    }
+
+    public int beautifulBouquet(int[] flowers, int cnt) {
+        int res = 0, left = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int right = 0; right < flowers.length; right++) {
+            map.put(flowers[right], map.getOrDefault(flowers[right], 0) + 1);
+            while (map.get(flowers[right]) > cnt) {
+                map.put(flowers[left], map.get(flowers[left]) - 1);
+                if (map.get(flowers[left]) == 0) {
+                    map.remove(flowers[left]);
+                }
+                left++;
+            }
+            res += right - left + 1;
+        }
+        return res;
+    }
+
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        //前缀和
+        int sum = 0, res = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);//初始化前缀和为0的个数为1
+        for (int num : nums) {
+            sum += num;
+            if (map.containsKey(sum - goal)) {
+                res += map.get(sum - goal);
+            }
+            map.put(sum,map.getOrDefault(sum,0)+1);
         }
         return res;
     }
