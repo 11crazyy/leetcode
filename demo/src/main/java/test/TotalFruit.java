@@ -104,8 +104,63 @@ public class TotalFruit {
             if (map.containsKey(sum - goal)) {
                 res += map.get(sum - goal);
             }
-            map.put(sum,map.getOrDefault(sum,0)+1);
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
         }
         return res;
     }
+
+    public int purchasePlans(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res = 0;
+        int l = 0, r = nums.length - 1;
+        while (l < r) {
+            if (nums[l] + nums[r] <= target) {
+                res += r - l;
+                l++;
+            } else {
+                r--;
+            }
+            res %= 1000000007;
+        }
+        return res % 1000000007;
+    }
+
+    public int minimumRefill(int[] plants, int capacityA, int capacityB) {
+        int fullA = capacityA, fullB = capacityB;
+        int left = 0, right = plants.length - 1;
+        int waterTime = 0;
+        while (left < right) {
+            if (plants[left] > capacityA) {//需要补水
+                waterTime++;
+                capacityA = fullA;
+            }
+            capacityA -= plants[left];//浇水
+            left++;
+            if (plants[right] > capacityB) {//需要补水
+                waterTime++;
+                capacityB = fullB;
+            }
+            capacityB -= plants[right];//浇水
+            right--;
+        }
+        if (left == right) {
+            if (plants[left] > capacityA && plants[left] > capacityB) {
+                waterTime++;
+            }
+        }
+        return waterTime;
+    }
+
+    public boolean checkIfExist(int[] arr) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int a : arr) {
+            if (map.containsKey(a * 2) || (a % 2 == 0 && map.containsKey(a / 2))) {
+                return true;
+            } else {
+                map.put(a, 1);
+            }
+        }
+        return false;
+    }
+
 }
