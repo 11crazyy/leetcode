@@ -1,6 +1,7 @@
 package test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Binary {
@@ -135,5 +136,53 @@ public class Binary {
         }
         return low;
     }
+
+    public int maximumCandies(int[] candies, long k) {
+        int left = 1, right = Arrays.stream(candies).max().getAsInt();
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (children(candies, mid) >= k) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return right;
+    }
+
+    public long children(int[] candies, int num) {
+        long res = 0;
+        for (int candy : candies) {
+            res += candy / num;
+        }
+        return res;
+    }
+
+    public int maxNumOfMarkedIndices(int[] nums) {
+        //排序后最小的k个数与最大的k个数匹配
+        Arrays.sort(nums);
+        int left = 0, right = nums.length / 2 + 1;//开区间
+        while (left + 1 < right) {
+            int mid = (left + right) / 2;
+            //判断mid个数是否能匹配
+            if (check(nums, mid)) {
+                left = mid;
+            } else {
+                right = mid;
+            }
+        }
+        return left * 2;
+    }
+
+    public boolean check(int[] nums, int k) {//0-2 1-3 k对
+        for (int i = 0; i < k; i++) {
+            if (nums[i] * 2 > nums[nums.length - k + i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
 
