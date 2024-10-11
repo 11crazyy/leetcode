@@ -1,8 +1,6 @@
 package test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Binary {
     public int minAbsoluteSumDiff(int[] nums1, int[] nums2) {
@@ -183,6 +181,48 @@ public class Binary {
         return true;
     }
 
+    public int maxPointsInsideSquare(int[][] points, String s) {
+        int[] min1 = new int[26];
+        int min2 = Integer.MAX_VALUE;
+        Arrays.fill(min1, Integer.MAX_VALUE);
+        for (int i = 0; i < points.length; i++) {
+            int x = Math.abs(points[i][0]);
+            int y = Math.abs(points[i][1]);
+            int d = Math.max(x, y);
+            int j = s.charAt(i) - 'a';
+            if (d < min1[j]) {
+                min2 = Math.min(min2, min1[j]);//更新第二小的距离(最小的次小的距离) 即为边长
+                min1[j] = d;//每个字母的最小距离
+            } else if (d < min2) {
+                min2 = d;//第二小的距离
+            }
+        }
+        int res = 0;
+        for (int i : min1) {
+            if (i < min2) {
+                res++;//计算满足的点有几个
+            }
+        }
+        return res;
+    }
+
+    public int minTime(int[] time, int m) {
+        if (time.length < m) {
+            return 0;
+        }
+        int low = 0, high = Integer.MAX_VALUE;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (check(time,mid,m)){
+                high = mid;
+            }else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+    public boolean check(int[] time,int mid,int m){//mid是作业量最多的最小时间 m是总时间
+    }
 
 }
 
