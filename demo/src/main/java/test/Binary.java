@@ -213,16 +213,65 @@ public class Binary {
         int low = 0, high = Integer.MAX_VALUE;
         while (low < high) {
             int mid = (low + high) / 2;
-            if (check(time,mid,m)){
+            if (check(time, mid, m)) {
                 high = mid;
-            }else {
+            } else {
                 low = mid + 1;
             }
         }
         return low;
     }
-    public boolean check(int[] time,int mid,int m){//mid是作业量最多的最小时间 m是总时间
+
+    public boolean check(int[] time, int mid, int m) {//mid是作业量最多的最小时间 m是总时间
+        //判断能否在m天内完成作业
+        int sum = 0, days = 1, maxTask = 0;//sum是当天的任务时间 days是天数 maxTask是当天最大的任务时间
+        for (int t : time) {
+            sum += t;
+            maxTask = Math.max(maxTask, t);
+            if (sum - maxTask > mid) {
+                days++;
+                sum = t;
+                maxTask = t;
+                if (days > m) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
+    public static void main(String[] args) {
+        Binary binary = new Binary();
+        int[] time = {1, 2, 3, 3};
+        System.out.println(binary.minTime(time, 2));
+    }
+
+    public int minCapability(int[] nums, int k) {
+        int low = Arrays.stream(nums).max().getAsInt();
+        int high = Arrays.stream(nums).min().getAsInt();
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (check1(nums, mid, k)) {//判断偷窃能力为mid时能否偷到k家
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+
+    public boolean check1(int[] nums, int mid, int k) {
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= mid) {
+                count++;
+                i++;
+            }
+            if (count >= k) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
