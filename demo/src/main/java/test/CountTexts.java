@@ -48,30 +48,34 @@ public class CountTexts {
         }
         return t2;
     }
+
     public double minimumAverage(int[] nums) {
         Arrays.sort(nums);
         double res = 0;
         int n = nums.length;
-        res = (double) (nums[n / 2 - 1] + nums[n / 2]) /2;
+        res = (double) (nums[n / 2 - 1] + nums[n / 2]) / 2;
         return res;
     }
+
     public int deleteAndEarn(int[] nums) {
         //t相邻的元素（t+1、t-1）不能偷 返回所偷金额的最大值  Math.max(dp[i-1],dp[i-2]+points[i])
         int maxVal = 0;
-        for(int num :nums){
-            maxVal = Math.max(maxVal,num);
+        for (int num : nums) {
+            maxVal = Math.max(maxVal, num);
         }
-        int[] points = new int[maxVal+1];//points[i]为i这个数对应的分数
-        for(int num: nums){
+        int[] points = new int[maxVal + 1];//points[i]为i这个数对应的分数
+        for (int num : nums) {
             points[num] += num;
         }
         int[] dp = new int[maxVal + 1];
-        dp[0] = 0;dp[1] = Math.max(points[1],points[0]);
-        for(int i = 2;i < points.length;i++){
-            dp[i] = Math.max(dp[i-1],dp[i-2]+points[i]);
+        dp[0] = 0;
+        dp[1] = Math.max(points[1], points[0]);
+        for (int i = 2; i < points.length; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + points[i]);
         }
         return dp[maxVal];
     }
+
     public int maximumCostSubstring(String s, String chars, int[] vals) {
         int[] dp = new int[s.length()];  // dp[i] 表示以第 i 个字符结尾的子串的最大开销
         dp[0] = Math.max(getValue(s.charAt(0), chars, vals), 0);  // 初始化第一个字符
@@ -98,8 +102,70 @@ public class CountTexts {
     }
 
 
-    public static void main(String[] args) {
-        CountTexts countTexts = new CountTexts();
-        countTexts.maximumCostSubstring("hghhghgghh","hg",new int[]{2,3});
+    public int jewelleryValue(int[][] frame) {
+        //dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]) + frame[i][j])
+        int[][] dp = new int[frame.length][frame[0].length];
+        //处理边界问题 最左侧和最上侧
+        dp[0][0] = frame[0][0];
+        for (int i = 1; i < frame.length; i++) {//第一列
+            dp[i][0] = dp[i - 1][0] + frame[i][0];
+        }
+        for (int i = 1; i < frame[0].length; i++) {//第一行
+            dp[0][i] = dp[0][i - 1] + frame[0][i];
+        }
+        for (int i = 1; i < frame.length; i++) {
+            for (int j = 1; j < frame[0].length; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]) + frame[i][j];
+            }
+        }
+        return dp[frame.length - 1][frame[0].length - 1];
+    }
+
+    public int maxProductPath(int[][] grid) {
+        long[][] maxVal = new long[grid.length][grid[0].length];
+        long[][] minVal = new long[grid.length][grid[0].length];
+        maxVal[0][0] = minVal[0][0] = grid[0][0];
+        for (int i = 1; i < grid.length; i++) {
+            maxVal[i][0] = minVal[i][0] = grid[i][0] * maxVal[i - 1][0];
+        }
+        for (int i = 1; i < grid[0].length; i++) {
+            maxVal[0][i] = minVal[0][i] = grid[0][i] * maxVal[0][i - 1];
+        }
+        for (int i = 1; i < grid.length; i++) {
+            for (int j = 1; j < grid[0].length; j++) {
+                if (grid[i][j] >= 0) {
+                    maxVal[i][j] = Math.max(maxVal[i][j - 1], maxVal[i - 1][j]) * grid[i][j];
+                    minVal[i][j] = Math.min(minVal[i][j - 1], minVal[i - 1][j]) * grid[i][j];
+                } else {
+                    maxVal[i][j] = Math.min(minVal[i][j - 1], minVal[i - 1][j]) * grid[i][j];
+                    minVal[i][j] = Math.max(maxVal[i][j - 1], maxVal[i - 1][j]) * grid[i][j];
+
+                }
+            }
+        }
+        long res = maxVal[grid.length - 1][grid[0].length - 1];
+        return res < 0 ? -1 : (int) (res % (1000000000 + 7));
+    }
+
+    public int findTargetSumWays(int[] nums, int target) {
+
+        //加法总和为x 减法总和为sum-x  x-(sum-x)=target -> x=(target+sum)/2 容量为x的背包有几种方法
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum < Math.abs(target) || (target + sum) % 2 == 1) {
+            return 0;
+        }
+        //求容量为x的背包有几种方法
+        int x = (target + sum) / 2;
+        int[] dp = new int[x + 1];//装满容量为i的背包有多少种方法  dp[j]+=dp[j-nums[i]]
+        dp[0] = 1;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = x; j >= nums[i]; j--) {
+                dp[j] += dp[j - nums[i]];
+            }
+        }
+        return dp[x];
     }
 }
