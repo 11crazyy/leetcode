@@ -168,4 +168,52 @@ public class CountTexts {
         }
         return dp[x];
     }
+
+    public int smallestRangeI(int[] nums, int k) {
+        Arrays.sort(nums);
+        int max = nums[nums.length - 1];
+        int min = nums[0];
+        return max - min >= 2 * k ? max - min - 2 * k : 0;
+    }
+
+    public int lastStoneWeightII(int[] stones) {
+        //s[i]==s[j]两块都碎 否则质量小的碎 质量大的为s[j]-s[i]
+        int min = 0;//尽力装满容量为sum的背包剩余的最小质量
+        int sum = 0;
+        for (int stone : stones) {
+            sum += stone;
+        }
+        int[] dp = new int[sum + 1];
+        dp[0] = 1;
+        Arrays.fill(dp, Integer.MIN_VALUE);
+        for (int i = 0; i < stones.length; i++) {
+            for (int j = sum; j >= stones[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - stones[i]]);
+            }
+        }
+        return sum - dp[sum];
+    }
+
+    public int countCompleteDayPairs(int[] hours) {
+        int[] flag = new int[hours.length];
+        Arrays.fill(flag, -1);
+        int res = 0;
+        for (int i = 0; i < hours.length - 1; i++) {
+            for (int j = i + 1; j < hours.length; j++) {
+                if ((hours[i] + hours[j]) % 24 == 0 && flag[i] == -1 && flag[j] == -1) {
+                    res++;
+                    flag[j] = 1;
+                    flag[i] = 1;
+                    continue;
+                }
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        CountTexts countTexts = new CountTexts();
+        int t = countTexts.countCompleteDayPairs(new int[]{72, 48, 24, 3});
+        System.out.println(t);
+    }
 }
