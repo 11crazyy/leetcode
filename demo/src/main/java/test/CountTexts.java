@@ -195,25 +195,14 @@ public class CountTexts {
     }
 
     public int countCompleteDayPairs(int[] hours) {
-        int[] flag = new int[hours.length];
-        Arrays.fill(flag, -1);
         int res = 0;
-        for (int i = 0; i < hours.length - 1; i++) {
-            for (int j = i + 1; j < hours.length; j++) {
-                if ((hours[i] + hours[j]) % 24 == 0 && flag[i] == -1 && flag[j] == -1) {
-                    res++;
-                    flag[j] = 1;
-                    flag[i] = 1;
-                    continue;
-                }
-            }
+        int[] cnt = new int[24];
+        for (int hour : hours){
+            res += cnt[(24-hour%24)%24];
+            cnt[hour%24]++;
         }
         return res;
     }
 
-    public static void main(String[] args) {
-        CountTexts countTexts = new CountTexts();
-        int t = countTexts.countCompleteDayPairs(new int[]{72, 48, 24, 3});
-        System.out.println(t);
-    }
+
 }
