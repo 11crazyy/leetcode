@@ -1,7 +1,6 @@
 package test;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class OrangeRotting {
     public int orangesRotting(int[][] grid) {
@@ -21,7 +20,7 @@ public class OrangeRotting {
         if (goodOranges == 0) {
             return 0;
         }
-        while (goodOranges > 0 && !queue.isEmpty()){
+        while (goodOranges > 0 && !queue.isEmpty()) {
             int n = queue.size();
             res++;
             for (int i = 0; i < n; i++) {
@@ -55,4 +54,58 @@ public class OrangeRotting {
         return -1;
 
     }
+
+    public int[] findRedundantConnection(int[][] edges) {
+        //去掉一个节点后树中节点不变（每个节点都至少连接一条边）去除冗余边
+        //并查集 两个节点如果已经连接则说明这条边是冗余边
+        int n = edges.length;
+
+        int[] parent = new int[n+1];
+        for (int i = 1; i <= n;i++){
+            parent[i] = i;//存每个节点的父节点
+        }
+        for(int[] edge : edges){
+            int x = edge[0];
+            int y = edge[1];
+            if (!union(x,y,parent)){
+                return edge;
+            }
+        }
+        return new int[]{0,0};
+    }
+    int findParent(int x,int[] parent){
+        if (x != parent[x]){
+            parent[x] = findParent(parent[x],parent);
+        }
+        return parent[x];
+    }
+    boolean union(int x,int y,int[] parent){
+        int rootX = findParent(x,parent);
+        int rootY = findParent(y,parent);
+        if (rootY == rootX){
+            return false;//已经连接 说明是冗余边
+        }
+        parent[rootX] = rootY;
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[][] grid = new int[][]{{1, 0}, {0,1}};
+        OrangeRotting orangeRotting = new OrangeRotting();
+        boolean res = orangeRotting.canFinish(2,grid);
+        System.out.println(res);
+    }
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        HashMap<int[], Integer> integerHashMap = new HashMap<>();
+        for(int i = 0;i < prerequisites.length; i++){
+            int[] prerequisite = prerequisites[i];
+            Arrays.sort(prerequisite);
+            integerHashMap.put(prerequisite,integerHashMap.getOrDefault(prerequisite,0)+1);
+            if (integerHashMap.get(prerequisite) > 1){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
