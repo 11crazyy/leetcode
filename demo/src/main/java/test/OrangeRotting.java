@@ -60,52 +60,67 @@ public class OrangeRotting {
         //并查集 两个节点如果已经连接则说明这条边是冗余边
         int n = edges.length;
 
-        int[] parent = new int[n+1];
-        for (int i = 1; i <= n;i++){
+        int[] parent = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
             parent[i] = i;//存每个节点的父节点
         }
-        for(int[] edge : edges){
+        for (int[] edge : edges) {
             int x = edge[0];
             int y = edge[1];
-            if (!union(x,y,parent)){
+            if (!union(x, y, parent)) {
                 return edge;
             }
         }
-        return new int[]{0,0};
+        return new int[]{0, 0};
     }
-    int findParent(int x,int[] parent){
-        if (x != parent[x]){
-            parent[x] = findParent(parent[x],parent);
+
+    int findParent(int x, int[] parent) {
+        if (x != parent[x]) {
+            parent[x] = findParent(parent[x], parent);
         }
         return parent[x];
     }
-    boolean union(int x,int y,int[] parent){
-        int rootX = findParent(x,parent);
-        int rootY = findParent(y,parent);
-        if (rootY == rootX){
+
+    boolean union(int x, int y, int[] parent) {
+        int rootX = findParent(x, parent);
+        int rootY = findParent(y, parent);
+        if (rootY == rootX) {
             return false;//已经连接 说明是冗余边
         }
         parent[rootX] = rootY;
         return true;
     }
 
-    public static void main(String[] args) {
-        int[][] grid = new int[][]{{1, 0}, {0,1}};
-        OrangeRotting orangeRotting = new OrangeRotting();
-        boolean res = orangeRotting.canFinish(2,grid);
-        System.out.println(res);
-    }
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-        HashMap<int[], Integer> integerHashMap = new HashMap<>();
-        for(int i = 0;i < prerequisites.length; i++){
-            int[] prerequisite = prerequisites[i];
-            Arrays.sort(prerequisite);
-            integerHashMap.put(prerequisite,integerHashMap.getOrDefault(prerequisite,0)+1);
-            if (integerHashMap.get(prerequisite) > 1){
-                return false;
+    public int longestCommonSubsequence(String text1, String text2) {
+        //最长公共子序列的长度 dp[i][j]表示text1[0:i]和text2[0:j]的最长公共子序列 dp[i][j]=dp[i-1][j-1]+1
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        for (int i = 1; i <= text1.length(); i++) {
+            for (int j = 1; j <= text2.length(); j++) {
+                dp[i][j] = text1.charAt(i - 1) == text2.charAt(j - 1) ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
-        return true;
+        return dp[text1.length()][text2.length()];
+    }
+
+    public int minDistance(String word1, String word2) {
+        int len1 = word1.length(), len2 = word2.length();
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        for (int i = 0; i <= len1; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= len2; j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1] + 1, Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1));//替换
+                }
+            }
+        }
+        return dp[len1][len2];
     }
 
 }
