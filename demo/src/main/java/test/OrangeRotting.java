@@ -123,4 +123,43 @@ public class OrangeRotting {
         return dp[len1][len2];
     }
 
+    public List<String> validStrings(int n) {
+        List<String> res = new ArrayList<String>();
+        char[] path = new char[n];
+        dfs(0, path, n, res);
+        return res;
+    }
+
+    public void dfs(int i, char[] path, int n, List<String> res) {
+        if (i == n) {//边界条件
+            res.add(new String(path));
+            return;
+        }
+        path[i] = '1';//填1
+        dfs(i + 1, path, n, res);
+        if (i == 0 || path[i - 1] == '1') {//此时可以填0
+            path[i] = '0';//填0
+            dfs(i + 1, path, n, res);
+        }
+    }
+    public int findNumberOfLIS(int[] nums) {
+        Map<Integer,Integer> map = new HashMap<>();//子序列对应的长度以及个数
+        int[] dp = new int[nums.length];
+        int res = 0;
+        for(int i = 0;i < nums.length; i++){
+            dp[i] = 1;
+            int len = 0;
+            for(int j = 0; j <= i;j++){
+                if(dp[i]>dp[j]){
+                    len++;
+                    dp[i] = Math.max(dp[i],dp[j]+1);
+                }else{
+                    map.put(len,map.getOrDefault(len,0)+1);
+                    len = 0;
+                }
+            }
+            res = Math.max(dp[i],res);
+        }
+        return map.get(res);
+    }
 }
