@@ -142,24 +142,65 @@ public class OrangeRotting {
             dfs(i + 1, path, n, res);
         }
     }
+
     public int findNumberOfLIS(int[] nums) {
-        Map<Integer,Integer> map = new HashMap<>();//子序列对应的长度以及个数
-        int[] dp = new int[nums.length];
-        int res = 0;
-        for(int i = 0;i < nums.length; i++){
+        int[] len = new int[nums.length];//长度为dp[i]的子序列的个数
+        int[] dp = new int[nums.length];//以nums[i]结尾的最长递增子序列的长度
+        int res = 0, maxLen = 0;
+        for (int i = 0; i < nums.length; i++) {
             dp[i] = 1;
-            int len = 0;
-            for(int j = 0; j <= i;j++){
-                if(dp[i]>dp[j]){
-                    len++;
-                    dp[i] = Math.max(dp[i],dp[j]+1);
-                }else{
-                    map.put(len,map.getOrDefault(len,0)+1);
-                    len = 0;
+            len[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    if (dp[i] < dp[j] + 1) {
+                        len[i] = len[j];
+                        dp[i] = dp[j] + 1;
+                    } else if (dp[i] == dp[j] + 1) {
+                        len[i] += len[j];
+                    }
                 }
             }
-            res = Math.max(dp[i],res);
+            if (res < dp[i]) {
+                res = dp[i];
+                maxLen = len[i];
+            } else if (res == dp[i]) {
+                maxLen += len[i];
+            }
         }
-        return map.get(res);
+        return maxLen;
+    }
+    public int minimumOperations(List<Integer> nums) {
+        //使nums成为非递减顺序所需要的最小操作数
+        int res = 100;
+        int[] dp = new int[nums.size()];//dp[i]表示以nums[i]结尾的最小操作数
+        for (int i = 0;i < nums.size(); i++){
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums.get(i) >= nums.get(j)){
+                    dp[i] = Math.min(dp[i],dp[j]+1);
+                }
+            }
+            res = Math.min(res,dp[i]);
+        }
+        return res;
+    }
+
+    public String getSmallestString(String s) {
+        //从左往右遍历 交换相邻的奇偶性一样的且前面大于后面
+        for (int i = 0; i < s.length() - 1; i++) {
+            int t1 = s.charAt(i) - '0';
+            int t2 = s.charAt(i + 1) - '0';
+            if ((t1 + t2) % 2 == 0 && t1 > t2) {
+                char c = s.charAt(i);
+                s = s.substring(0, i) + s.charAt(i + 1) + c + s.substring(i + 2, s.length());
+                break;
+            }
+        }
+        return s;
+    }
+
+    public static void main(String[] args) {
+        OrangeRotting orangeRotting = new OrangeRotting();
+        System.out.println(orangeRotting.getSmallestString("45320"));
     }
 }
