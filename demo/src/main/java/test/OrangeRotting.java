@@ -169,18 +169,19 @@ public class OrangeRotting {
         }
         return maxLen;
     }
+
     public int minimumOperations(List<Integer> nums) {
         //使nums成为非递减顺序所需要的最小操作数
         int res = 100;
         int[] dp = new int[nums.size()];//dp[i]表示以nums[i]结尾的最小操作数
-        for (int i = 0;i < nums.size(); i++){
+        for (int i = 0; i < nums.size(); i++) {
             dp[i] = 1;
             for (int j = 0; j < i; j++) {
-                if (nums.get(i) >= nums.get(j)){
-                    dp[i] = Math.min(dp[i],dp[j]+1);
+                if (nums.get(i) >= nums.get(j)) {
+                    dp[i] = Math.min(dp[i], dp[j] + 1);
                 }
             }
-            res = Math.min(res,dp[i]);
+            res = Math.min(res, dp[i]);
         }
         return res;
     }
@@ -201,6 +202,34 @@ public class OrangeRotting {
 
     public static void main(String[] args) {
         OrangeRotting orangeRotting = new OrangeRotting();
-        System.out.println(orangeRotting.getSmallestString("45320"));
+        System.out.println(orangeRotting.maxProfit(new int[]{1, 2, 3, 0, 2}));
+    }
+
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) {
+            return 0;
+        }
+        int[][] dp = new int[prices.length][3];//dp[i][0]表示目前持有股票，对应的最大收益；dp[i][1]表示目前不持有股票且这天之后处于冷冻期，对应的最大收益；dp[i][2]表示目前不持有股票且不处于冷冻期，对应的最大收益
+        //dp[i][0] = max(dp[i-1][0],dp[i-1][2]+prices[i])
+        //dp[i][1] = dp[i-1][0]+prices[i]
+        //dp[i][2] = max(dp[i-1][1],dp[i-1][2])
+        dp[0][0] = -prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][2] - prices[i]);
+            dp[i][1] = dp[i - 1][0] + prices[i];
+            dp[i][2] = Math.max(dp[i - 1][1], dp[i - 1][2]);
+        }
+        return Math.max(dp[prices.length - 1][1], dp[prices.length - 1][2]);
+    }
+
+    public int maxProfit(int[] prices, int fee) {
+        //dp[i][0]表示第i天结束后手上持有股票的最大收益 dp[i][1]表示第i天结束后手上不持有股票的最大收益
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = -prices[0];//dp[i][0] = max(dp[i-1][0],dp[i-1][i-1][1]-prices[i]) dp[i][1] = max(dp[i-1][1],dp[i-1][0]+prices[i]-fee)
+        for (int i = 1; i < prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] - prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i] - fee);
+        }
+        return dp[prices.length - 1][1];
     }
 }
