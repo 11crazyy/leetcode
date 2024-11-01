@@ -202,7 +202,7 @@ public class OrangeRotting {
 
     public static void main(String[] args) {
         OrangeRotting orangeRotting = new OrangeRotting();
-        System.out.println(orangeRotting.maxProfit(new int[]{1, 2, 3, 0, 2}));
+        System.out.println(orangeRotting.longestSubarray(new int[]{0, 1, 1, 1, 0, 1, 1, 0, 1}));
     }
 
     public int maxProfit(int[] prices) {
@@ -231,5 +231,42 @@ public class OrangeRotting {
             dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i] - fee);
         }
         return dp[prices.length - 1][1];
+    }
+
+    public long maxEnergyBoost(int[] energyDrinkA, int[] energyDrinkB) {
+        //求能量最大值 如果要切换则需要间隔1h
+        int n = energyDrinkA.length;
+        long[][] dp = new long[n][2];//dp[i][0]表示第i步从A取 dp[i][1]表示第i步从B取
+        //dp[i][0] = eA[i] + max(dp[i-2][1],dp[i-1][0])
+        //dp[i][1] = eB[i] + max(dp[i-1][1],dp[i-2][0])
+        dp[0][0] = energyDrinkA[0];
+        dp[1][0] = energyDrinkA[0] + energyDrinkA[1];
+        dp[0][1] = energyDrinkB[0];
+        dp[1][1] = energyDrinkB[0] + energyDrinkB[1];
+        for (int i = 2; i < n; i++) {
+            dp[i][0] = energyDrinkA[i] + Math.max(dp[i - 2][1], dp[i - 1][0]);
+            dp[i][1] = energyDrinkB[i] + Math.max(dp[i - 1][1], dp[i - 2][0]);
+        }
+        return Math.max(dp[n - 1][0], dp[n - 1][1]);
+    }
+
+    public int longestSubarray(int[] nums) {
+        //删除一个元素后连续1的最长长度 计算滑动窗口中0的数量 保证只含有一个0的窗口中1的数量最多
+        int n = nums.length;
+        int res = 0, left = 0;
+        int count0 = 0, count1 = 0;//窗口中0和1的数量
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                count0++;
+            }
+            while (count0 > 1) {
+                if (nums[left] == 0) {
+                    count0--;
+                }
+                left++;
+            }
+            res = Math.max(res, i - left);
+        }
+        return res;
     }
 }
