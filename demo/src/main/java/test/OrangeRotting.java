@@ -202,7 +202,7 @@ public class OrangeRotting {
 
     public static void main(String[] args) {
         OrangeRotting orangeRotting = new OrangeRotting();
-        System.out.println(orangeRotting.longestSubarray(new int[]{0, 1, 1, 1, 0, 1, 1, 0, 1}));
+        System.out.println(orangeRotting.minChanges(13, 4));
     }
 
     public int maxProfit(int[] prices) {
@@ -268,5 +268,26 @@ public class OrangeRotting {
             res = Math.max(res, i - left);
         }
         return res;
+    }
+
+    public int minChanges(int n, int k) {
+        //如果k不是n的子集 返回-1 如果k是n的子集 结果为n-k的大小
+        return (n & k) != k ? -1 : Integer.bitCount(n ^ k);
+    }
+
+    public boolean validPartition(int[] nums) {
+        //dp[0]=true dp[i+1]表示能否有效划分[0,i]
+        int n = nums.length;
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true;
+        //dp[i] = dp[i-1]&&nums[i] == nums[i-1] || dp[i-2]&&nums[i-1]==nums[i-2] || dp[i-2]&&nums[i] == nums[i-1]+1==nums[i-2]+2
+        for (int i = 1; i < n; i++) {
+            if (dp[i - 1] && nums[i] == nums[i - 1] ||
+                    i > 1 && dp[i - 2] && (nums[i] == nums[i - 1] && nums[i] == nums[i - 2] ||
+                            nums[i] == nums[i - 1] + 1 && nums[i] == nums[i - 2] + 2)) {
+                dp[i + 1] = true;
+            }
+        }
+        return dp[n];
     }
 }
