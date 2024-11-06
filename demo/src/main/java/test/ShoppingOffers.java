@@ -1,9 +1,6 @@
 package test;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ShoppingOffers {
     public int numDecodings(String s) {
@@ -137,26 +134,63 @@ public class ShoppingOffers {
 
     public static void main(String[] args) {
         ShoppingOffers shoppingOffers = new ShoppingOffers();
-        boolean i = shoppingOffers.canReach(new int[]{3,0,2,1,2}, 2);
-        System.out.println(i);
+        int t = shoppingOffers.integerReplacement(2147483647);
+        System.out.println(t);
     }
-//    public int minimumCoins(int[] prices) {
-//        //dp[i][0]表示买前i个水果且不买第i个水果的最少金币数 dp[i][1]表示买前i个且买第i个水果的最少金币数
-//        //dp[i][1]=min(dp[i-1][1]+prices[i]) dp[i][0] = min(赠送)
-//        int n = prices.length;
-//        int[][] dp = new int[n][2];
-//        for (int i = 0; i < n; i++) {
-//            dp[i][0] = dp[i][1] = 999999;
-//        }
-//        dp[0][0] = 0;
-//        dp[0][1] = prices[0];
-//        for (int i = 1; i < n; i++) {
-//            dp[i][1] = Math.min(dp[i][0],dp[i][1] + prices[i-1]);
-//            //i>=j+1 i<=j+j
-//            for (int j = i / 2; j <= i - 1; j++) {
-//                dp[i][0] = Math.min(dp[j][1], dp[i][0]);
-//            }
-//        }
-//        return Math.min(dp[n - 1][0], dp[n - 1][1]);
-//    }
+
+    Map<Long, Integer> memo = new HashMap<>();
+
+    public int[] resultsArray(int[] nums, int k) {
+        int n = nums.length;
+        int[] res = new int[n - k + 1];
+        int index = 0;
+        for (int i = 0; i < n; i++) {
+            index = i == 0 || nums[i] - nums[i - 1] != 1 ? 1 : index++;
+            if (index >= k) {
+                res[i - k + 1] = nums[i];
+            }
+        }
+        return res;
+    }
+
+    public int integerReplacement(int n) {
+        return dfs((long) n);
+    }
+
+    public int dfs(long n) {
+        if (n == 1) {
+            return 0;
+        }
+        if (memo.containsKey(n)) {
+            return memo.get(n);
+        }
+        int res = 0;
+        if (n % 2 == 0) {
+            res = dfs(n / 2) + 1;
+        } else {
+            res = Math.min(dfs(n + 1), dfs(n - 1)) + 1;
+        }
+        memo.put(n, res);
+        return res;
+    }
+
+    private final Map<Integer, Integer> map = new HashMap<>();
+
+    public int minimumOperationsToMakeEqual(int x, int y) {
+        if (x <= y) {
+            return y - x;
+        }
+        if (map.containsKey(x)) {
+            return map.get(x);
+        }
+        int ans = x - y;
+        ans = Math.min(ans, 1 + minimumOperationsToMakeEqual(x / 11, y) + x % 11);
+        ans = Math.min(ans, 1 + minimumOperationsToMakeEqual(x / 11 + 1, y) + 11 - x % 11);
+        ans = Math.min(ans, 1 + minimumOperationsToMakeEqual(x / 5, y) + x % 5);
+        ans = Math.min(ans, 1 + minimumOperationsToMakeEqual(x / 5 + 1, y) + 5 - x % 5);
+        map.put(x, ans);
+        return ans;
+    }
+
+
 }
