@@ -134,7 +134,7 @@ public class ShoppingOffers {
 
     public static void main(String[] args) {
         ShoppingOffers shoppingOffers = new ShoppingOffers();
-        int t = shoppingOffers.integerReplacement(2147483647);
+        int t = shoppingOffers.longestCommonSubarry(new int[]{1, 2}, new int[]{1, 2});
         System.out.println(t);
     }
 
@@ -150,6 +150,18 @@ public class ShoppingOffers {
                 res[i - k + 1] = nums[i];
             }
         }
+        return res;
+    }
+
+    public String[] maxValidParenthesesStr(String s) {
+        // write code here
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        String[] res = new String[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        int t = Math.min(map.get(')'), map.get('('));
         return res;
     }
 
@@ -192,5 +204,79 @@ public class ShoppingOffers {
         return ans;
     }
 
+    public int longestCommonSubarry(int[] A, int[] B) {
+        // write code here
+        int res = 0;
+        int sum = 0;
+        int i = 0, j = 0;
+        while (i < A.length && j < B.length) {
+            if (A[i] == B[j]) {
+                sum++;
+                i++;
+                j++;
+            } else {
+                sum = 0;
+                i++;
+            }
+            res = Math.max(res, sum);
+        }
+        return res;
+    }
 
+    public int leafPairs(TreeNode root, int k) {
+        // write code here
+        return dfs(root, 0, k);
+    }
+
+    public int dfs(TreeNode node, int sum, int k) {
+        if (node == null) {
+            return 0;
+        }
+        if (sum == k) {
+            return 0;
+        }
+        if (node.left != null) {
+            return dfs(node.left, sum + 1, k);
+        }
+        if (node.right != null) {
+            return dfs(node.right, sum + 1, k);
+        }
+        return sum;
+    }
+
+    public int[] resultsArray1(int[] nums, int k) {
+        int n = nums.length;
+        int[] res = new int[n - k + 1];
+        Arrays.fill(res, -1);
+        int t = 0;
+        for (int i = 0; i < nums.length; i++) {
+            t = (i == 0 || nums[i] - nums[i - 1] == 1) ? t + 1 : 1;
+            if (t >= k) {
+                res[i - k + 1] = nums[i];
+            }
+        }
+        return res;
+    }
+
+    public void getNext(int[] next, String s) {
+        int j = 0;//前缀末尾
+        next[0] = 0;
+        for (int i = 1; i < s.length(); i++) {
+            while (j > 0 && s.charAt(i) != s.charAt(j)) {//前后缀不匹配
+                j = next[j - 1];
+            }
+            if (s.charAt(i) == s.charAt(j)) {
+                j++;
+            }
+            next[i] = j;
+        }
+
+    }
+
+    public boolean rotateString(String s, String goal) {
+        if (s.length() != goal.length()) {
+            return false;
+        }
+        return (s + s).contains(goal);
+    }
 }
