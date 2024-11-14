@@ -279,4 +279,20 @@ public class ShoppingOffers {
         }
         return (s + s).contains(goal);
     }
+
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        //先出手稳赢则为true 否则为false
+        if (maxChoosableInteger >= desiredTotal) {
+            return true;
+        }
+        int t = 0, sum = 0;
+        for (int i = maxChoosableInteger; i > 0; i--) {
+            sum += i;
+            if (sum > desiredTotal) {
+                t++;
+                break;
+            }
+        }
+        return t % 2 == 1;
+    }
 }
