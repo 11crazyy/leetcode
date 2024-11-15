@@ -38,14 +38,6 @@ public class Stack {
         return res;
     }
 
-    public static void main(String[] args) {
-        Stack stack = new Stack();
-        int[] temperatures = new int[]{73, 74, 75, 71, 69, 72, 76, 73};
-        int[] res = stack.dailyTemperatures(temperatures);
-        for (int re : res) {
-            System.out.println(re);
-        }
-    }
 
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         int[] numsAns = new int[nums1.length];
@@ -65,5 +57,74 @@ public class Stack {
             deque.push(nums2[i]);
         }
         return numsAns;
+    }
+
+    public int minFlips(int[][] grid) {
+        //翻转任意格子后 每一行都是回文或每一列都是回文 回文：总数为偶数时01个数也偶数 总数为奇数时0奇1偶或0偶1奇
+        int m = grid.length;
+        int n = grid[0].length;
+        int diff = 0;
+        for (int[] row : grid) {
+            for (int i = 0; i < n / 2; i++) {
+                if (row[i] != row[n - 1 - i]) {
+                    diff++;
+                }
+            }
+        }
+        int diff1 = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m / 2; j++) {
+                if (grid[j][i] != grid[m - 1 - j][i]) {
+                    diff1++;
+                }
+            }
+        }
+        return Math.min(diff, diff1);
+    }
+
+    public int[] nextLargerNodes(ListNode head) {
+        ListNode tmp = head;
+        int len = 0;
+        while (tmp != null) {
+            len++;
+            tmp = tmp.next;
+        }
+        int[] res1 = new int[len];
+        int t = 0;
+        ListNode node = head;
+        while (node != null) {
+            res1[t++] = node.val;
+            node = node.next;
+        }
+        int[] res = new int[len];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = len - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && res1[i] >= stack.peek()) {
+                stack.pop();
+            }
+            if (!stack.isEmpty()) {
+                res[i] = stack.peek();
+            }
+            stack.push(res1[i]);
+        }
+        return res;
+    }
+
+    public int maxWidthRamp(int[] nums) {
+        //第一次遍历构建单调递减栈 第二次遍历找到最大宽度
+        int n = nums.length, res = 0;
+        Deque<Integer> deque = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            if (deque.isEmpty() || nums[deque.peek()] > nums[i]) {
+                deque.push(i);
+            }
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            while (!deque.isEmpty() && nums[deque.peek()] <= nums[i]) {
+                int num = deque.pop();
+                res = Math.max(res, i - num);
+            }
+        }
+        return res;
     }
 }
