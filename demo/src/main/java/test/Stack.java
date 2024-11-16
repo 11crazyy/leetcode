@@ -127,4 +127,17 @@ public class Stack {
         }
         return res;
     }
+
+    public int[] sortByBits(int[] arr) {
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = Integer.bitCount(arr[i]) * 10000000 + arr[i];
+        }
+        Arrays.sort(res);
+        for (int i = 0; i < res.length; i++) {
+            res[i] %= 10000000;
+        }
+        return res;
+    }
+    
 }
