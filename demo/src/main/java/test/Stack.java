@@ -139,5 +139,53 @@ public class Stack {
         }
         return res;
     }
-    
+
+    public int[] pondSizes(int[][] land) {
+        List<Integer> list = new ArrayList<>();
+        int i = 0;
+        for(int j = 0;j<land.length;j++){
+            for(int k = 0;k < land[0].length;k++){
+                if(land[j][k]==0){
+                    list.add(dfs(land,j,k));
+                }
+            }
+        }
+        int[] res = new int[list.size()];
+        for(int num:list){
+            res[i++] = num;
+        }
+        Arrays.sort(res);
+        return res;
+    }
+    public int dfs(int[][] land,int x,int y){
+        if(x<0||y<0||x>=land.length||y>=land[0].length||land[x][y]!=0){
+            return 0;
+        }
+        land[x][y] = 1;
+        int count = 1;
+        for(int i = x-1;i<=x+1;i++){
+            for(int j = y-1;j<=y+1;j++){
+                count += dfs(land,i,j);
+            }
+        }
+        return count;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
