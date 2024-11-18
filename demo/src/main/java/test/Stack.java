@@ -143,34 +143,88 @@ public class Stack {
     public int[] pondSizes(int[][] land) {
         List<Integer> list = new ArrayList<>();
         int i = 0;
-        for(int j = 0;j<land.length;j++){
-            for(int k = 0;k < land[0].length;k++){
-                if(land[j][k]==0){
-                    list.add(dfs(land,j,k));
+        for (int j = 0; j < land.length; j++) {
+            for (int k = 0; k < land[0].length; k++) {
+                if (land[j][k] == 0) {
+                    list.add(dfs(land, j, k));
                 }
             }
         }
         int[] res = new int[list.size()];
-        for(int num:list){
+        for (int num : list) {
             res[i++] = num;
         }
         Arrays.sort(res);
         return res;
     }
-    public int dfs(int[][] land,int x,int y){
-        if(x<0||y<0||x>=land.length||y>=land[0].length||land[x][y]!=0){
+
+    public int dfs(int[][] land, int x, int y) {
+        if (x < 0 || y < 0 || x >= land.length || y >= land[0].length || land[x][y] != 0) {
             return 0;
         }
         land[x][y] = 1;
         int count = 1;
-        for(int i = x-1;i<=x+1;i++){
-            for(int j = y-1;j<=y+1;j++){
-                count += dfs(land,i,j);
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                count += dfs(land, i, j);
             }
         }
         return count;
     }
+
+    public int[][] imageSmoother(int[][] img) {
+        int m = img.length, n = img[0].length;
+        int[][] res = new int[img.length][img[0].length];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i][j] = smooth(img, i, j);
+            }
+        }
+        return res;
+    }
+
+    public int smooth(int[][] img, int i, int j) {
+        int m = img.length, n = img[0].length;
+        if (i < 0 || j < 0 || i >= m || j >= n) {
+            return 0;
+        }
+        int count = 0, cnt = 0;
+        for (int k = i - 1; k <= i + 1; k++) {
+            for (int l = j - 1; l <= j + 1; l++) {
+                if (k < 0 || l < 0 || k >= m || l >= n) {
+                    cnt++;
+                    continue;
+                }
+                count += img[k][l];
+            }
+        }
+        return count / (9 - cnt);
+    }
+    class Solution {
+        public int findCircleNum(int[][] isConnected) {
+            int cities = isConnected.length;
+            boolean[] visited = new boolean[cities];
+            int provinces = 0;
+            for (int i = 0; i < cities; i++) {
+                if (!visited[i]) {
+                    dfs(isConnected, visited, cities, i);
+                    provinces++;
+                }
+            }
+            return provinces;
+        }
+
+        public void dfs(int[][] isConnected, boolean[] visited, int cities, int i) {
+            for (int j = 0; j < cities; j++) {
+                if (isConnected[i][j] == 1 && !visited[j]) {//i和j连通且j未被访问
+                    visited[j] = true;
+                    dfs(isConnected, visited, cities, j);
+                }
+            }
+        }
+    }
 }
+
 
 
 
