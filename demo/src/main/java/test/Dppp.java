@@ -1,8 +1,6 @@
 package test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Dppp {
     public int lastStoneWeightII(int[] stones) {
@@ -37,21 +35,40 @@ public class Dppp {
         //f[j] = f[j] || f[j-v]表示能不能得到奖励数j
         Arrays.sort(rewardValues);
         int sum = 0;
-        for(int rewardValue : rewardValues){
+        for (int rewardValue : rewardValues) {
             sum += rewardValue;
         }
-        boolean[] dp = new boolean[2*rewardValues[rewardValues.length-1]];
+        boolean[] dp = new boolean[2 * rewardValues[rewardValues.length - 1]];
         dp[0] = true;
-        for(int rewardValue : rewardValues){
-            for(int j = 2*rewardValue-1;j >= rewardValue;j--){
-                dp[j] = dp[j] || dp[j-rewardValue];
+        for (int rewardValue : rewardValues) {
+            for (int j = 2 * rewardValue - 1; j >= rewardValue; j--) {
+                dp[j] = dp[j] || dp[j - rewardValue];
             }
         }
         int res = 0;
-        for(int i = 0;i < dp.length;i++){
-            if(dp[i]){
+        for (int i = 0; i < dp.length; i++) {
+            if (dp[i]) {
                 res = i;
             }
+        }
+        return res;
+    }
+
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res = new ArrayList<>();
+        //恰好覆盖数组中所有数字的最小有序区间范围列表
+        int i = 0;
+        while (i < nums.length) {
+            int left = i + 1;
+            while (left < nums.length && nums[left] - nums[left - 1] == 1) {
+                left++;
+            }
+            if (left - i == 1) {
+                res.add(nums[i] + "");
+            } else {
+                res.add(nums[i] + "->" + nums[left - 1]);
+            }
+            i = left;
         }
         return res;
     }
