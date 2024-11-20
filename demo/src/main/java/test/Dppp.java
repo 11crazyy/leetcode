@@ -72,4 +72,29 @@ public class Dppp {
         }
         return res;
     }
+
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res = new ArrayList<>();
+        //二叉树的层平均值
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            double sum = 0;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                sum += node.val;
+                TreeNode left = node.left;
+                TreeNode right = node.right;
+                if (left != null) {
+                    queue.offer(left);
+                }
+                if (right != null) {
+                    queue.offer(right);
+                }
+            }
+            res.add((double) sum / size);
+        }
+        return res;
+    }
 }
