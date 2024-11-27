@@ -97,4 +97,7 @@ public class Dppp {
         }
         return res;
     }
+    public int winningPlayerCount(int n, int[][] pick) {
+
+    }
 }
