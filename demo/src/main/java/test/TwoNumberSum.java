@@ -23,7 +23,7 @@ class TwoNumberSum {
                 res = 0;
             }
             res++;
-            
+
             if (i >= n && res >= k) {
                 ans++;
             }
