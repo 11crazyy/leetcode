@@ -20,4 +20,25 @@ public class AddBinary {
         buffer.reverse();
         return buffer.toString();
     }
+
+    public String convertDateToBinary(String date) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(Integer.toBinaryString(Integer.parseInt(date.substring(0,4))));
+        sb.append("-");
+        sb.append(Integer.toBinaryString(Integer.parseInt(date.substring(5,7))));
+        sb.append("-");
+        sb.append(Integer.toBinaryString(Integer.parseInt(date.substring(8,10))));
+        return sb.toString();
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int index1 = m + n - 1,p1=m-1,p2=n-1;
+        while(p2 >= 0){
+            if(p1>=0 && nums1[p1]>nums2[p2]){
+                nums1[index1--] = nums1[p1--];
+            }else{
+                nums1[index1--] = nums2[p2--];
+            }
+        }
+    }
 }
