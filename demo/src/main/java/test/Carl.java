@@ -1,5 +1,6 @@
 package test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Carl {
@@ -48,5 +49,39 @@ public class Carl {
         }
         return head;
     }
+    public int removeElement(int[] nums, int val) {
+        int res = 0,t = 0;
+        int[] ans = new int[nums.length];
+        for(int i = 0;i < nums.length;i++){
+            if(nums[i] == val){
+                res++;
+            }else{
+                ans[t++] = nums[i];
+            }
+        }
+        for(int i = 0;i < nums.length;i++){
+            nums[i] = ans[i];
+        }
+        return nums.length - res;
+    }
 
+    public static void main(String[] args) {
+        Carl carl = new Carl();
+        int[] nums = {3,2,3};
+        carl.majorityElement(nums);
+    }
+    public int majorityElement(int[] nums) {
+        int t = nums.length /2;
+        Arrays.sort(nums);
+        int n = 1;
+        for(int i = 1;i < nums.length;i++){
+            if(nums[i] == nums[i-1]){
+                n++;
+                if(n> t){
+                    return nums[i];
+                }
+            }else n = 1;
+        }
+        return nums[0];
+    }
 }
