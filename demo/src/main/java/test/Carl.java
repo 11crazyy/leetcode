@@ -36,30 +36,31 @@ public class Carl {
     }
 
     //移除链表元素
-    public ListNode removeElements(ListNode head,int target){
+    public ListNode removeElements(ListNode head, int target) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         ListNode cur = dummy;
-        while (cur.next !=null){
-            if (cur.next.val == target){
+        while (cur.next != null) {
+            if (cur.next.val == target) {
                 cur.next = cur.next.next;
-            }else {
+            } else {
                 cur = cur.next;
             }
         }
         return head;
     }
+
     public int removeElement(int[] nums, int val) {
-        int res = 0,t = 0;
+        int res = 0, t = 0;
         int[] ans = new int[nums.length];
-        for(int i = 0;i < nums.length;i++){
-            if(nums[i] == val){
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == val) {
                 res++;
-            }else{
+            } else {
                 ans[t++] = nums[i];
             }
         }
-        for(int i = 0;i < nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             nums[i] = ans[i];
         }
         return nums.length - res;
@@ -67,21 +68,40 @@ public class Carl {
 
     public static void main(String[] args) {
         Carl carl = new Carl();
-        int[] nums = {3,2,3};
+        int[] nums = {3, 2, 3};
         carl.majorityElement(nums);
     }
+
     public int majorityElement(int[] nums) {
-        int t = nums.length /2;
+        int t = nums.length / 2;
         Arrays.sort(nums);
         int n = 1;
-        for(int i = 1;i < nums.length;i++){
-            if(nums[i] == nums[i-1]){
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
                 n++;
-                if(n> t){
+                if (n > t) {
                     return nums[i];
                 }
-            }else n = 1;
+            } else n = 1;
         }
         return nums[0];
+    }
+
+    public void rotate(int[] nums, int k) {
+        int n = nums.length;
+        k %= n;
+        reverse(nums, 0, n - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, n - 1);
+    }
+
+    public void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int t = nums[start];
+            nums[start] = nums[end];
+            nums[end] = t;
+            start++;
+            end--;
+        }
     }
 }
