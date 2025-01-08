@@ -104,4 +104,21 @@ public class Carl {
             end--;
         }
     }
+
+    public String largestGoodInteger(String num) {
+        int cnt = 1;
+        char c = 0;
+        for(int i = 1;i < num.length();i++){
+            char t = num.charAt(i);
+            if(t != num.charAt(i-1)){
+                cnt=1;
+            }else{
+                cnt++;
+                if(cnt==3 && t > c){
+                    c = t;
+                }
+            }
+        }
+        return c == 0?"":String.valueOf(c).repeat(3);
+    }
 }
