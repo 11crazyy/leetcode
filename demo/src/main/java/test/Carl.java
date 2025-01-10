@@ -121,4 +121,17 @@ public class Carl {
         }
         return c == 0?"":String.valueOf(c).repeat(3);
     }
+
+    public int maxProfit(int[] prices) {
+        int max = 0,min = 9999;
+        for(int i = 0;i < prices.length;i++){
+            if(prices[i] < min){
+                min = prices[i];
+            }
+            if(prices[i] - min > max){
+                max = prices[i] - min;
+            }
+        }
+        return max;
+    }
 }
