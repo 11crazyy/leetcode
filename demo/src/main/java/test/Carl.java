@@ -108,30 +108,43 @@ public class Carl {
     public String largestGoodInteger(String num) {
         int cnt = 1;
         char c = 0;
-        for(int i = 1;i < num.length();i++){
+        for (int i = 1; i < num.length(); i++) {
             char t = num.charAt(i);
-            if(t != num.charAt(i-1)){
-                cnt=1;
-            }else{
+            if (t != num.charAt(i - 1)) {
+                cnt = 1;
+            } else {
                 cnt++;
-                if(cnt==3 && t > c){
+                if (cnt == 3 && t > c) {
                     c = t;
                 }
             }
         }
-        return c == 0?"":String.valueOf(c).repeat(3);
+        return c == 0 ? "" : String.valueOf(c).repeat(3);
     }
 
     public int maxProfit(int[] prices) {
-        int max = 0,min = 9999;
-        for(int i = 0;i < prices.length;i++){
-            if(prices[i] < min){
+        int max = 0, min = 9999;
+        for (int i = 0; i < prices.length; i++) {
+            if (prices[i] < min) {
                 min = prices[i];
             }
-            if(prices[i] - min > max){
+            if (prices[i] - min > max) {
                 max = prices[i] - min;
             }
         }
         return max;
+    }
+
+    public int generateKey(int num1, int num2, int num3) {
+        int ans = 0, t = 0;
+        //从低位开始，找出每一位的最小值，直到有一个数为0 通过/10来枚举每一位
+        while (num1 != 0 && num2 != 0 && num3 != 0) {
+            ans += (Math.min(num1 % 10, Math.min(num2 % 10, num3 % 10)) * Math.pow(10, t));
+            num1 /= 10;
+            num2 /= 10;
+            num3 /= 10;
+            t++;
+        }
+        return ans;
     }
 }
