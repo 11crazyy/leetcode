@@ -39,4 +39,21 @@ public class MyCalendarTwo {
             tree.get(idx)[0] = tree.get(idx)[1] + Math.max(tree.get(2 * idx)[0], tree.get(2 * idx + 1)[0]);//更新当前区间的重叠次数
         }
     }
+    //计算数组中所有第k位是1的数的个数
+    public int countKOne(int[] candidates,int k){
+        int count = 0;
+        for(int c : candidates){
+            if((c & (1 << k)) != 0){
+                count++;
+            }
+        }
+        return count;
+    }
+    public int largestCombination(int[] candidates) {
+        int max = 0;
+        for(int i = 0;i < 24;i++){
+            max = Math.max(max,countKOne(candidates,i));
+        }
+        return max;
+    }
 }
